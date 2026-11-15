@@ -1,0 +1,57 @@
+---
+// One project in the tour library: the poster, the project name, how many rooms, one line of summary.
+// The whole card opens the tour page; the name is the real link so screen readers hear one clear name.
+// With `open` (the id of a Tour section on the same page) the name is a button instead, and pressing the card
+// starts that tour in place through Tour.astro's data-tour-open hook. Nothing heavier than the poster loads first.
+import { plural, type Tour } from "../data/tours";
+
+interface Props { tour: Tour; level?: 2 | 3; eager?: boolean; open?: string }
+const { tour, level = 2, eager = false, open } = Astro.props;
+const H = `h${level}` as "h2" | "h3";
+const href = `/tours/${tour.slug}/`;
+const floors = tour.floors.length;
+const rooms = plural(tour.rooms.length, "room");
+const meta = `${rooms.charAt(0).toUpperCase()}${rooms.slice(1)}${floors > 1 ? ` on ${plural(floors, "floor")}` : ""}`;
+---
+
+<article class="tc">
+  <div class="tc-pic">
+    <img src={`${tour.base}poster-sm.webp`} srcset={`${tour.base}poster-sm.webp 800w, ${tour.base}poster.webp ${tour.poster.w}w`} sizes="(max-width: 760px) 94vw, (max-width: 1400px) 56vw, 760px" width={tour.poster.w} height={tour.poster.h} alt="" loading={eager ? "eager" : "lazy"} decoding="async" />
+  </div>
+  <div class="tc-body">
+    <p class="tc-meta">{meta}</p>
+    <H class="tc-name">{open
+      ? <button type="button" data-tour-open={open} aria-controls={open} aria-expanded="false">{tour.project}</button>
+      : <a href={href}>{tour.project}</a>}</H>
+    <p class="tc-sum">{tour.summary}</p>
+    <span class="tc-go" aria-hidden="true">{open ? "Start the tour" : "Walk through it"}</span>
+  </div>
+</article>
+
+<style is:global>
+  .tc { position: relative; display: flex; flex-direction: column; height: 100%; border-radius: var(--ax-r-card); }
+  .tc:focus-within { outline: 2px solid var(--ax-accent); outline-offset: 6px; }
+  .tc-pic { overflow: hidden; border-radius: var(--ax-r-media); background: var(--ax-surface-2); }
+  .tc-pic img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; transition: transform 1.2s var(--ax-ease); }
+  .tc:hover .tc-pic img { transform: scale(1.04); }
+  .tc-body { display: flex; flex-direction: column; align-items: flex-start; flex: 1 1 auto; padding-top: clamp(14px, 1.6vw, 22px); }
+  .tc-meta { margin: 0 0 8px; font-size: 15px; font-weight: 600; color: var(--ax-text-3); }
+  .tc-name { margin: 0; font-size: clamp(30px, 3vw, 48px); line-height: 0.94; text-wrap: balance; }
+  .tc-name a { color: inherit; text-decoration: none; }
+  .tc-name button { padding: 0; border: 0; background: none; font: inherit; line-height: inherit; color: inherit; text-align: left; cursor: pointer; }
+  .tc-name :is(a, button):focus-visible { outline: none; }
+  /* the name's link covers the whole card */
+  .tc-name :is(a, button)::after { content: ""; position: absolute; inset: 0; border-radius: var(--ax-r-card); }
+  .tc-sum { margin: 10px 0 0; max-width: 34em; font-size: 16.5px; line-height: 1.5; color: var(--ax-text-2); }
+  .tc-go { display: inline-flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 14px; min-height: 44px; font-size: 15.5px; font-weight: 600; color: var(--ax-text); }
+  .tc-go::after { content: ""; width: 16px; height: 16px; background: currentColor; -webkit-mask: var(--ax-arrow) center / 16px no-repeat; mask: var(--ax-arrow) center / 16px no-repeat; transition: transform 0.3s var(--ax-ease); }
+  .tc:hover .tc-go::after { transform: translateX(4px); }
+  @media (max-width: 600px) {
+    .tc-name { font-size: 28px; }
+    .tc-sum { font-size: 15.5px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tc-pic img, .tc-go::after { transition: none; }
+    .tc:hover .tc-pic img { transform: none; }
+  }
+</style>

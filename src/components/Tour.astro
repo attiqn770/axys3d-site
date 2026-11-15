@@ -1,0 +1,234 @@
+---
+// VIRTUAL TOUR: one 360 degree, room to room tour from the library (src/data/tours.ts).
+// Nothing but the poster loads until the visitor presses "Start the tour" (page weight rule): three.js,
+// the viewer (src/scripts/tour.ts) and the first panorama are fetched on that press. Several tours can sit
+// on one page; each loads only when its own button is pressed, and the viewer code is fetched once.
+// Rooms, hotspot directions and start views come from src/data/tours/<slug>.json; pictures from
+// public/media/tours/<slug>/. A tour whose data or pictures are missing renders nothing.
+// Anything outside the component can open a tour at a room with a button carrying
+// data-tour-open="<section id>" and data-room="<room slug>" (the room list on the tour pages does this).
+import { getTour, tourBase, type Tour, type TourFile } from "../data/tours";
+
+interface Props {
+  slug?: string;                         // a tour from the library
+  data?: TourFile;                       // or the data itself ...
+  base?: string;                         // ... plus its picture folder (defaults to the library folder)
+  id?: string;                           // section id, unique on the page
+  heading?: string;                      // leave out for no heading
+  level?: 1 | 2 | 3;
+  lead?: string;
+  cta?: boolean;                         // the amber "Start a project" under the view
+  links?: { href: string; label: string }[];
+  eager?: boolean;                       // the poster is the first thing on the page
+}
+const { slug, data, base: baseIn, id = "tour", heading, level = 2, lead, cta = true, links = [], eager = false } = Astro.props;
+
+let tour: Pick<Tour, "slug" | "rooms" | "project" | "poster"> & { base: string } | undefined;
+if (data) {
+  tour = { slug: data.slug, rooms: data.rooms, project: data.project, base: baseIn ?? tourBase(data.slug), poster: { w: 1600, h: 900, alt: data.poster_alt ?? `${data.project}, a frame from the virtual tour` } };
+} else if (slug) {
+  tour = getTour(slug);
+}
+const base = tour?.base ?? "";
+const first = tour?.rooms[0];
+const H = `h${level}` as "h1" | "h2" | "h3";
+const hid = `${id}H`;
+// only the room data travels to the browser: no picture paths, so the shared preview can rewrite data-base
+const payload = tour ? JSON.stringify({ slug: tour.slug, rooms: tour.rooms }) : "";
+---
+
+{tour && first && (
+<section class:list={["ax-dark tour", level === 1 && "tour--top"]} id={id} aria-labelledby={heading ? hid : undefined} aria-label={heading ? undefined : `Virtual tour of the ${tour.project.toLowerCase()}`}>
+  <div class="ax-wrap">
+    {heading && (
+      <header class="ax-head">
+        <H class:list={["ax-display", level === 1 && "ax-h1--sm"]} id={hid} data-ax>{heading}</H>
+        {lead && <p class="ax-lead" data-ax>{lead}</p>}
+      </header>
+    )}
+
+    <div class="tr" data-base={base} data-tour={payload} data-ax>
+      <div class="tr-stage">
+        <img class="tr-poster" src={`${base}poster.webp`} srcset={`${base}poster-sm.webp 800w, ${base}poster.webp ${tour.poster.w}w`} sizes="(max-width: 900px) 94vw, 1280px" width={tour.poster.w} height={tour.poster.h} alt={tour.poster.alt} loading={eager ? "eager" : "lazy"} fetchpriority={eager ? "high" : undefined} decoding="async" />
+        <canvas class="tr-canvas" tabindex="0" aria-label="360 degree view. Drag or use the arrow keys to look around, plus and minus to zoom." hidden></canvas>
+        <div class="tr-spots" hidden></div>
+        <div class="tr-start">
+          <button type="button" class="ax-btn tr-go">Start the tour</button>
+          <span class="tr-meta">{tour.rooms.length} {tour.rooms.length === 1 ? "room" : "rooms"}, 360 degree views</span>
+        </div>
+        <p class="tr-where" hidden><strong class="tr-name">{first.name}</strong><span class="tr-floor">{first.floor}</span></p>
+        <button type="button" class="tr-full" aria-label="Full screen" hidden>
+          <svg viewBox="0 0 16 16" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2h4v4M6 14H2v-4M14 10v4h-4M2 6V2h4" /></svg>
+        </button>
+        <p class="tr-hint" hidden>Drag to look around</p>
+      </div>
+      <div class="tr-rooms" role="group" aria-label="Rooms in the tour" hidden>
+        {tour.rooms.map((r) => (
+          <button type="button" data-room={r.slug}>{r.name}</button>
+        ))}
+      </div>
+      <p class="tr-status" role="status" aria-live="polite"></p>
+    </div>
+
+    {(cta || links.length > 0) && (
+      <div class="pg-actions tour-actions" data-ax>
+        {cta && <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>}
+        {links.map((l) => <a href={l.href} class="ax-link">{l.label}</a>)}
+      </div>
+    )}
+  </div>
+</section>
+)}
+
+<style is:global>
+  .tour { padding-block: var(--ax-section); }
+  /* first on its page (a tour page): clears the header and keeps the view high enough that "Start the tour" shows without scrolling */
+  .tour--top { padding-top: calc(var(--ax-nav-h) + clamp(28px, 5vw, 72px)); padding-bottom: clamp(40px, 5vw, 80px); }
+  .tour--top .ax-head { margin-bottom: clamp(20px, 2.6vw, 36px); }
+  .tour--top .ax-lead { max-width: 38em; }
+  .tour--top .tr-stage { max-height: max(400px, calc(100svh - 390px)); }
+  .tr { position: relative; background: #0b0c0f; }
+  .tr-stage { position: relative; aspect-ratio: 16 / 9; max-height: 78vh; width: 100%; overflow: hidden; border-radius: var(--ax-r-media); background: #17191e; }
+  .tr-poster, .tr-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .tr-poster { object-fit: cover; }
+  .tr-canvas { touch-action: pan-y; cursor: grab; outline-offset: -3px; }
+  .tr-canvas.is-drag { cursor: grabbing; }
+  .tr-canvas[hidden], .tr-spots[hidden], .tr-where[hidden], .tr-full[hidden], .tr-hint[hidden], .tr-rooms[hidden], .tr-start[hidden] { display: none !important; }
+  /* the press that starts it: bottom left, over a short ink fade so the words read on any frame */
+  .tr-start { position: absolute; left: 0; right: 0; bottom: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; padding: 56px clamp(16px, 2.4vw, 28px) clamp(16px, 2.4vw, 28px); background: linear-gradient(to top, rgba(8, 9, 11, 0.72), rgba(8, 9, 11, 0)); }
+  .tr-meta { font-size: 15px; font-weight: 600; color: rgba(255, 255, 255, 0.9); }
+  .tr-go { background: #fff; color: #0b0c0f; }
+  .tr-go:hover { background: #e9eaee; }
+  .tr.is-loading .tr-go { opacity: 0.7; cursor: progress; }
+  /* small panels over the live view: the one place glass is allowed (DESIGN.md) */
+  .tr :is(.tr-where, .tr-full, .tr-spot, .tr-hint) { background: rgba(14, 16, 20, 0.82); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1); color: #f5f6f8; }
+  .tr-where { position: absolute; left: 12px; top: 12px; margin: 0; display: flex; flex-direction: column; gap: 3px; padding: 9px 14px 10px; border-radius: var(--ax-r-btn-sm); line-height: 1.15; pointer-events: none; }
+  .tr-name { font-size: 15px; font-weight: 700; }
+  .tr-floor { font-size: 13px; font-weight: 500; color: rgba(245, 246, 248, 0.78); }
+  .tr-full { position: absolute; right: 12px; top: 12px; display: grid; place-items: center; width: 44px; height: 44px; border-radius: var(--ax-r-btn-sm); cursor: pointer; }
+  .tr-full:hover { background: rgba(40, 43, 50, 0.9); }
+  .tr-hint { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); margin: 0; padding: 8px 14px; border-radius: var(--ax-r-chip); font-size: 13.5px; font-weight: 600; white-space: nowrap; pointer-events: none; transition: opacity 0.4s ease; }
+  .tr-hint.is-gone { opacity: 0; }
+  .tr-spots { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+  .tr-spot { position: absolute; left: 0; top: 0; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px 0 11px; border-radius: var(--ax-r-btn-sm); font: 600 14.5px/1 var(--ax-font); white-space: nowrap; cursor: pointer; pointer-events: auto; transition: opacity 0.2s ease, background-color 0.2s ease; will-change: transform; }
+  .tr-spot svg { flex: none; color: var(--ax-accent); }
+  .tr-spot:hover { background: rgba(40, 43, 50, 0.92); }
+  .tr-spot.is-off { opacity: 0; pointer-events: none; }
+  /* rooms: plain words under the view, the current one underlined in amber like the header */
+  .tr-rooms { display: flex; flex-wrap: wrap; gap: 0 clamp(14px, 2vw, 28px); padding-top: 6px; }
+  .tr-rooms button { min-height: 44px; padding: 0 2px; background: none; border: 0; font: 600 15.5px/1 var(--ax-font); color: rgba(245, 246, 248, 0.72); cursor: pointer; box-shadow: inset 0 -2px 0 transparent; transition: color 0.2s ease, box-shadow 0.2s ease; }
+  .tr-rooms button:hover { color: #fff; }
+  .tr-rooms button[aria-current="true"] { color: #fff; box-shadow: inset 0 -2px 0 var(--ax-accent); }
+  .tr-status { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .tr-status.is-error { position: static; width: auto; height: auto; margin: 0; overflow: visible; clip-path: none; white-space: normal; padding-top: 10px; font-size: 15px; color: rgba(245, 246, 248, 0.85); }
+  .tour-actions { margin-top: clamp(24px, 3vw, 40px); }
+  /* full screen: the view takes the screen, the room list stays under it */
+  .tr:fullscreen { display: flex; flex-direction: column; width: 100vw; height: 100vh; padding: 0; }
+  .tr:fullscreen .tr-stage { flex: 1 1 auto; aspect-ratio: auto; max-height: none; border-radius: 0; min-height: 0; }
+  .tr:fullscreen .tr-canvas { touch-action: none; }
+  .tr:fullscreen .tr-rooms { padding: 4px 16px 8px; }
+  @media (max-width: 760px) {
+    .tr-stage { aspect-ratio: 4 / 5; max-height: 72vh; }
+    .tr-where { left: 8px; top: 8px; padding: 7px 11px 8px; }
+    .tr-full { right: 8px; top: 8px; }
+    .tr-spot { font-size: 14px; padding: 0 12px 0 9px; }
+    .tr-rooms { gap: 0 18px; }
+    .tr-start .ax-btn { width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tr-spot, .tr-hint, .tr-rooms button { transition: none; }
+  }
+</style>
+
+<script>
+  import type { TourApi, TourData, TourRoom } from "../scripts/tour";
+
+  document.querySelectorAll<HTMLElement>(".tr").forEach((root) => {
+    const data = JSON.parse(root.dataset.tour!) as TourData;
+    const stage = root.querySelector<HTMLElement>(".tr-stage")!;
+    const canvas = root.querySelector<HTMLCanvasElement>(".tr-canvas")!;
+    const spots = root.querySelector<HTMLElement>(".tr-spots")!;
+    const start = root.querySelector<HTMLElement>(".tr-start")!;
+    const goBtn = root.querySelector<HTMLButtonElement>(".tr-go")!;
+    const where = root.querySelector<HTMLElement>(".tr-where")!;
+    const full = root.querySelector<HTMLButtonElement>(".tr-full")!;
+    const hint = root.querySelector<HTMLElement>(".tr-hint")!;
+    const list = root.querySelector<HTMLElement>(".tr-rooms")!;
+    const status = root.querySelector<HTMLElement>(".tr-status")!;
+    const poster = root.querySelector<HTMLElement>(".tr-poster")!;
+    const roomBtns = Array.from(list.querySelectorAll<HTMLButtonElement>("button"));
+    let api: TourApi | null = null;
+
+    const showRoom = (r: TourRoom) => {
+      where.querySelector(".tr-name")!.textContent = r.name;
+      where.querySelector(".tr-floor")!.textContent = r.floor;
+      roomBtns.forEach((b) => { if (b.dataset.room === r.slug) b.setAttribute("aria-current", "true"); else b.removeAttribute("aria-current"); });
+    };
+
+    // starts the tour (at a chosen room, or the first one); a second call only changes room
+    const open = async (at?: string) => {
+      if (api) { if (at) void api.go(at); return; }
+      if (root.classList.contains("is-loading")) return;
+      root.classList.add("is-loading");
+      goBtn.textContent = "Loading the tour";
+      status.classList.remove("is-error");
+      status.textContent = "";
+      try {
+        const { createTour } = await import("../scripts/tour");
+        canvas.hidden = false;
+        api = createTour({
+          root, stage, canvas, spots, data, base: root.dataset.base!,
+          onRoom: showRoom,
+          onBusy: (busy, r) => { status.textContent = busy ? `Loading ${r.name}` : `${r.name}, ${r.floor}`; },
+          onMoved: () => hint.classList.add("is-gone"),
+        });
+        const firstRoom = data.rooms.some((r) => r.slug === at) ? at! : data.rooms[0].slug;
+        if (!(await api.go(firstRoom))) throw new Error("first view missing");
+
+        start.hidden = true;
+        poster.hidden = true;
+        for (const el of [spots, where, hint, list]) el.hidden = false;
+        if (document.fullscreenEnabled) full.hidden = false;
+        api.resize();
+        canvas.focus({ preventScroll: true });
+      } catch {
+        // no WebGL, or the picture did not arrive: keep the poster and say so
+        api = null;
+        canvas.hidden = true;
+        goBtn.textContent = "Start the tour";
+        status.classList.add("is-error");
+        status.textContent = "The 360 view could not start in this browser.";
+      }
+      root.classList.remove("is-loading");
+    };
+    goBtn.addEventListener("click", () => { void open(); });
+    // buttons elsewhere on the page (the room list on a tour page) open this tour at their room
+    root.addEventListener("tour:open", (e) => { void open((e as CustomEvent<string>).detail); });
+
+    roomBtns.forEach((b) => b.addEventListener("click", () => { void api?.go(b.dataset.room!); }));
+
+    full.addEventListener("click", () => {
+      if (document.fullscreenElement) void document.exitFullscreen();
+      else void root.requestFullscreen().catch(() => {});
+    });
+    document.addEventListener("fullscreenchange", () => {
+      full.setAttribute("aria-label", document.fullscreenElement === root ? "Leave full screen" : "Full screen");
+      api?.resize();
+    });
+  });
+
+  // one listener for every "open this tour at this room" button on the page
+  document.addEventListener("click", (e) => {
+    const b = (e.target as Element | null)?.closest<HTMLElement>("[data-tour-open]");
+    if (!b) return;
+    const root = document.getElementById(b.dataset.tourOpen!)?.querySelector<HTMLElement>(".tr");
+    if (!root) return;
+    e.preventDefault();
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // bring the view up just under the header, then start it at the chosen room
+    const nav = document.getElementById("axNav")?.offsetHeight ?? 60;
+    const top = root.getBoundingClientRect().top + window.scrollY - nav - 12;
+    window.scrollTo({ top: Math.max(0, top), behavior: reduce ? "instant" : "smooth" });
+    root.dispatchEvent(new CustomEvent("tour:open", { detail: b.dataset.room }));
+  });
+</script>

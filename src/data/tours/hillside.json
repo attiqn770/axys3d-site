@@ -1,0 +1,124 @@
+{
+ "slug": "hillside",
+ "project": "Split level residence",
+ "summary": "A house stepped into a hillside, walked from the front door up to the primary suite and its back deck.",
+ "rooms_count": 6,
+ "poster_alt": "Living and dining room of the split level residence, a frame from the virtual tour",
+ "order": 1,
+ "title": "Split level residence",
+ "note": "Six 360 degree views rendered from the studio's Revit model.",
+ "size": [
+  4096,
+  2048
+ ],
+ "small": [
+  2048,
+  1024
+ ],
+ "rooms": [
+  {
+   "slug": "entry",
+   "name": "Entry",
+   "floor": "Ground floor",
+   "yaw": 150,
+   "pitch": 0,
+   "spots": [
+    {
+     "to": "living",
+     "yaw": 162,
+     "pitch": 6
+    }
+   ]
+  },
+  {
+   "slug": "living",
+   "name": "Living and dining",
+   "floor": "Second floor",
+   "yaw": 40,
+   "pitch": 0,
+   "spots": [
+    {
+     "to": "kitchen",
+     "yaw": 237,
+     "pitch": -8
+    },
+    {
+     "to": "bedroom",
+     "yaw": 141,
+     "pitch": 2
+    },
+    {
+     "to": "entry",
+     "yaw": 127,
+     "pitch": -14
+    }
+   ]
+  },
+  {
+   "slug": "kitchen",
+   "name": "Kitchen",
+   "floor": "Second floor",
+   "yaw": 275,
+   "pitch": 0,
+   "spots": [
+    {
+     "to": "living",
+     "yaw": 320,
+     "pitch": -8
+    }
+   ]
+  },
+  {
+   "slug": "bedroom",
+   "name": "Primary bedroom",
+   "floor": "Third floor",
+   "yaw": 60,
+   "pitch": 0,
+   "spots": [
+    {
+     "to": "deck",
+     "yaw": 159,
+     "pitch": -12
+    },
+    {
+     "to": "bathroom",
+     "yaw": 359,
+     "pitch": -8
+    },
+    {
+     "to": "living",
+     "yaw": 339,
+     "pitch": -6
+    }
+   ]
+  },
+  {
+   "slug": "bathroom",
+   "name": "Primary bath",
+   "floor": "Third floor",
+   "yaw": 90,
+   "pitch": 0,
+   "spots": [
+    {
+     "to": "bedroom",
+     "yaw": 186,
+     "pitch": -10
+    }
+   ]
+  },
+  {
+   "slug": "deck",
+   "name": "Back deck",
+   "floor": "Third floor",
+   "yaw": 20,
+   "pitch": 0,
+   "spots": [
+    {
+     "to": "bedroom",
+     "yaw": 59,
+     "pitch": -5
+    }
+   ]
+  }
+ ]
+}

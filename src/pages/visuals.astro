@@ -4,7 +4,15 @@ import SEO from "../components/SEO.astro";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 import WorkReel from "../components/WorkReel.astro";
+import Tour from "../components/Tour.astro";
+import TourCard from "../components/TourCard.astro";
+import { tours } from "../data/tours";
 import "../styles/global.css";
+
+// VIRTUAL TOURS: every ready tour in src/data/tours.ts. The first opens as an inline viewer; the rest are cards
+// that start their own viewer in place. Adding a tour is data only: drop its json and pictures, then rebuild.
+const [firstTour, ...moreTours] = tours;
+const tourId = (slug: string) => `tour-${slug}`;
 
 // adu-9 to adu-11 are new camera angles rendered from the same scene (tools/render-portfolio.py)
 const renders = [1, 14, 9, 15, 11, 16, 10, 13].map((n) => `adu-${n}`);
@@ -68,6 +76,33 @@ const stages = [
         </div>
       </section>
 
+      <!-- virtual tours: right after the project in depth, as the next way to see our work -->
+      {firstTour && (
+        <div class="ax-dark vt" id="tours">
+          <Tour slug={firstTour.slug} id={tourId(firstTour.slug)} heading="Walk through the rooms before they are built." lead={`${firstTour.project}. ${firstTour.summary}`} cta={false} />
+          {moreTours.length > 0 && (
+            <div class="ax-wrap vt-more">
+              <p class="vt-more-h" data-ax>More tours</p>
+              <ul class="vt-cards">
+                {moreTours.map((t) => (
+                  <li data-ax><TourCard tour={t} level={3} open={tourId(t.slug)} /></li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {moreTours.map((t) => (
+            <div class="vt-slot" data-slot={tourId(t.slug)} hidden>
+              <Tour slug={t.slug} id={tourId(t.slug)} heading={t.project} level={3} lead={t.summary} cta={false} />
+            </div>
+          ))}
+          <div class="ax-wrap">
+            <div class="pg-actions vt-actions" data-ax>
+              <a href="/contact/" class="ax-btn ax-btn--gold">Start a project</a>
+            </div>
+          </div>
+        </div>
+      )}
+
       <section class="ax-section vs-films" aria-labelledby="vsFilms" id="films">
         <div class="ax-wrap">
           <header class="ax-head" style="margin-bottom:0">
@@ -117,13 +152,32 @@ const stages = [
   .vs-stages img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; border-radius: var(--ax-r-md); background: #0d0d0c; }
   .vs-stages h3 { margin: 18px 0 8px; }
   .vs-stages p { margin: 0; font-size: 15.5px; line-height: 1.55; color: var(--ax-text-2); }
+  /* virtual tours: one dark band; the Tour sections inside it share its padding */
+  .vt { padding-block: var(--ax-section); }
+  .vt .tour { padding-block: 0; }
+  .vt-more { margin-top: clamp(48px, 6vw, 96px); }
+  .vt-more-h { margin: 0 0 clamp(16px, 2vw, 24px); font-size: 15px; font-weight: 600; color: var(--ax-text-3); }
+  .vt-cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(32px, 4vw, 56px) clamp(16px, 2.4vw, 32px); }
+  .vt-slot { margin-top: clamp(48px, 6vw, 96px); }
+  .vt-actions { margin-top: clamp(32px, 4vw, 56px); }
+  @media (max-width: 760px) { .vt-cards { grid-template-columns: 1fr; } }
   .vs-films .wr { padding-top: clamp(32px, 4vw, 56px); padding-bottom: 0; }
   @media (max-width: 1000px) { .vs-stages { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 560px) { .vs-stages { grid-template-columns: 1fr; } }
 </style>
 
 <script>
-  const box = document.getElementById("vsBox") as HTMLDialogElement | null;
+  // a tour card reveals its own viewer before Tour.astro's data-tour-open hook scrolls to it and starts it
+  // (capture phase, so this runs first); a hidden viewer has loaded nothing, not even its poster
+  document.addEventListener("click", (e) => {
+    const b = (e.target as Element | null)?.closest<HTMLElement>(".vt [data-tour-open]");
+    if (!b) return;
+    const slot = document.querySelector<HTMLElement>(`.vt-slot[data-slot="${b.dataset.tourOpen}"]`);
+    if (slot) slot.hidden = false;
+    b.setAttribute("aria-expanded", "true");
+  }, true);
+
+  const box =document.getElementById("vsBox") as HTMLDialogElement | null;
   if (box) {
     const img = box.querySelector("img")!;
     const cap = box.querySelector<HTMLElement>(".vs-box-cap")!;

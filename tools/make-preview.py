@@ -31,7 +31,7 @@ def fix_html(html: str, depth: int, self_path: str) -> str:
         if name == "href" and "." not in last:      # a page, not a file
             return f'{name}="{page_url(val, prefix)}"'
         return f'{name}="{prefix}{val[1:]}"'
-    html = re.sub(r'\b(href|src|srcset|imagesrcset|poster|action|data-clip|data-film|data-src|data-src-tall|data-full|content)="([^"]*)"', attr, html)
+    html = re.sub(r'\b(href|src|srcset|imagesrcset|poster|action|data-clip|data-film|data-src|data-src-tall|data-full|data-base|content)="([^"]*)"', attr, html)
     html = html.replace("url(/", f"url({prefix}")
     # in page anchors keep working without relying on the document address
     return html
