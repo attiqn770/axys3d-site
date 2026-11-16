@@ -1,0 +1,106 @@
+{
+ "slug": "forest-retreat",
+ "project": "Forest retreat",
+ "summary": "A timber clad house stepped down a wooded slope with wraparound decks, walked from the road to the forest edge.",
+ "rooms_count": 5,
+ "poster_alt": "Rear of the forest retreat with its stepped timber decks among tall trees, a frame from the virtual tour",
+ "order": 40,
+ "title": "Forest retreat",
+ "note": "Five exterior 360 degree views path traced in Unreal Engine from the studio's scene. The rooms are bare shells in the model, so the tour stays outside.",
+ "kind": "exterior",
+ "size": [
+  4096,
+  2048
+ ],
+ "small": [
+  2048,
+  1024
+ ],
+ "rooms": [
+  {
+   "slug": "approach",
+   "name": "Approach road",
+   "floor": "Exterior",
+   "yaw": 0,
+   "pitch": 0,
+   "spots": [
+    {
+     "to": "front",
+     "yaw": 358.0,
+     "pitch": -5.9
+    }
+   ]
+  },
+  {
+   "slug": "front",
+   "name": "Front drive",
+   "floor": "Exterior",
+   "yaw": 0,
+   "pitch": 0,
+   "spots": [
+    {
+     "to": "approach",
+     "yaw": 268.0,
+     "pitch": -0.6
+    },
+    {
+     "to": "terrace",
+     "yaw": 358.1,
+     "pitch": -9.7
+    }
+   ]
+  },
+  {
+   "slug": "terrace",
+   "name": "Main deck",
+   "floor": "Exterior",
+   "yaw": 0,
+   "pitch": 0,
+   "spots": [
+    {
+     "to": "front",
+     "yaw": 178.1,
+     "pitch": 3.5
+    },
+    {
+     "to": "garden",
+     "yaw": 357.4,
+     "pitch": -2.6
+    }
+   ]
+  },
+  {
+   "slug": "garden",
+   "name": "Garden below the decks",
+   "floor": "Exterior",
+   "yaw": 0,
+   "pitch": 0,
+   "spots": [
+    {
+     "to": "terrace",
+     "yaw": 357.4,
+     "pitch": -5.7
+    },
+    {
+     "to": "forest-edge",
+     "yaw": 100.1,
+     "pitch": 1.1
+    }
+   ]
+  },
+  {
+   "slug": "forest-edge",
+   "name": "Forest edge",
+   "floor": "Exterior",
+   "yaw": 0,
+   "pitch": 0,
+   "spots": [
+    {
+     "to": "garden",
+     "yaw": 318.1,
+     "pitch": -6.9
+    }
+   ]
+  }
+ ]
+}

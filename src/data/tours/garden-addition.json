@@ -3,6 +3,7 @@
  "project": "Hillside home with garden addition",
  "summary": "A hillside home with a new two storey addition: a garden suite below, a family room and bedroom above, and a deck over the spa terrace.",
  "rooms_count": 8,
+ "order": 20,
  "title": "Hillside home with garden addition",
  "note": "Eight 360 degree views rendered from the studio's scene of the Revit model. Furniture and decor are virtual staging.",
  "size": [
