@@ -1,0 +1,140 @@
+{
+ "slug": "adu-residence",
+ "project": "Two storey residence with ADU",
+ "summary": "A new two storey accessory dwelling unit beside the main house, toured from the garden room up to the living space, bedroom, bath and balcony.",
+ "rooms_count": 6,
+ "title": "Two storey residence with ADU",
+ "note": "360 degree views of the new ADU, rendered from the studio's own scene. Furniture and decor are virtual staging.",
+ "size": [
+  4096,
+  2048
+ ],
+ "small": [
+  2048,
+  1024
+ ],
+ "rooms": [
+  {
+   "slug": "living",
+   "name": "Living and kitchen",
+   "floor": "Upper floor",
+   "yaw": 95,
+   "pitch": 0,
+   "staged": true,
+   "spots": [
+    {
+     "to": "bedroom",
+     "yaw": 248,
+     "pitch": -8
+    },
+    {
+     "to": "deck",
+     "yaw": 55,
+     "pitch": -8
+    },
+    {
+     "to": "lower",
+     "yaw": 23,
+     "pitch": -16
+    }
+   ]
+  },
+  {
+   "slug": "bedroom",
+   "name": "Bedroom",
+   "floor": "Upper floor",
+   "yaw": 260,
+   "pitch": 0,
+   "staged": true,
+   "spots": [
+    {
+     "to": "living",
+     "yaw": 129,
+     "pitch": -10
+    },
+    {
+     "to": "bath",
+     "yaw": 3,
+     "pitch": -10
+    }
+   ]
+  },
+  {
+   "slug": "bath",
+   "name": "Bathroom",
+   "floor": "Upper floor",
+   "yaw": 20,
+   "pitch": 0,
+   "staged": true,
+   "spots": [
+    {
+     "to": "bedroom",
+     "yaw": 142,
+     "pitch": -18
+    }
+   ]
+  },
+  {
+   "slug": "deck",
+   "name": "Balcony",
+   "floor": "Upper floor",
+   "yaw": 90,
+   "pitch": 0,
+   "staged": true,
+   "spots": [
+    {
+     "to": "living",
+     "yaw": 307,
+     "pitch": -10
+    },
+    {
+     "to": "garden",
+     "yaw": 98,
+     "pitch": -22
+    }
+   ]
+  },
+  {
+   "slug": "lower",
+   "name": "Garden room",
+   "floor": "Ground floor",
+   "yaw": 0,
+   "pitch": 0,
+   "staged": true,
+   "spots": [
+    {
+     "to": "living",
+     "yaw": 287,
+     "pitch": -10
+    },
+    {
+     "to": "garden",
+     "yaw": 74,
+     "pitch": -10
+    }
+   ]
+  },
+  {
+   "slug": "garden",
+   "name": "Garden",
+   "floor": "Outside",
+   "yaw": 270,
+   "pitch": 0,
+   "staged": false,
+   "spots": [
+    {
+     "to": "lower",
+     "yaw": 276,
+     "pitch": -4
+    },
+    {
+     "to": "deck",
+     "yaw": 282,
+     "pitch": 20
+    }
+   ]
+  }
+ ],
+ "poster_alt": "Upper floor living room of the ADU with a sofa, rug and the kitchen beyond, looking towards the balcony doors",
+ "order": 20
+}
