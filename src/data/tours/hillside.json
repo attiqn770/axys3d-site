@@ -6,7 +6,7 @@
  "poster_alt": "Living and dining room of the split level residence, a frame from the virtual tour",
  "order": 1,
  "title": "Split level residence",
- "note": "Six 360 degree views rendered from the studio's Revit model.",
+ "note": "Six 360 degree views rendered from the studio's Revit model and virtually staged.",
  "size": [
   4096,
   2048
@@ -101,8 +101,8 @@
    "spots": [
     {
      "to": "bedroom",
-     "yaw": 186,
-     "pitch": -10
+     "yaw": 199,
+     "pitch": -14
     }
    ]
   },

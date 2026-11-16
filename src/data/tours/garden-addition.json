@@ -1,0 +1,174 @@
+{
+ "slug": "garden-addition",
+ "project": "Hillside home with garden addition",
+ "summary": "A hillside home with a new two storey addition: a garden suite below, a family room and bedroom above, and a deck over the spa terrace.",
+ "rooms_count": 8,
+ "title": "Hillside home with garden addition",
+ "note": "Eight 360 degree views rendered from the studio's scene of the Revit model. Furniture and decor are virtual staging.",
+ "size": [
+  4096,
+  2048
+ ],
+ "small": [
+  2048,
+  1024
+ ],
+ "rooms": [
+  {
+   "slug": "suite",
+   "name": "Garden suite",
+   "floor": "Ground floor",
+   "yaw": 60,
+   "pitch": 0,
+   "staged": true,
+   "spots": [
+    {
+     "to": "suite-bedroom",
+     "yaw": 106.8,
+     "pitch": -20
+    },
+    {
+     "to": "terrace",
+     "yaw": 262.9,
+     "pitch": -22
+    }
+   ]
+  },
+  {
+   "slug": "suite-bedroom",
+   "name": "Garden suite bedroom",
+   "floor": "Ground floor",
+   "yaw": 90,
+   "pitch": 0,
+   "staged": true,
+   "spots": [
+    {
+     "to": "suite",
+     "yaw": 193.8,
+     "pitch": -30
+    }
+   ]
+  },
+  {
+   "slug": "terrace",
+   "name": "Spa terrace",
+   "floor": "Ground floor",
+   "yaw": 270,
+   "pitch": 0,
+   "staged": true,
+   "spots": [
+    {
+     "to": "suite",
+     "yaw": 268.0,
+     "pitch": -10
+    },
+    {
+     "to": "deck",
+     "yaw": 290.0,
+     "pitch": 8
+    }
+   ]
+  },
+  {
+   "slug": "deck",
+   "name": "Deck",
+   "floor": "Upper floor",
+   "yaw": 250,
+   "pitch": 0,
+   "staged": true,
+   "spots": [
+    {
+     "to": "terrace",
+     "yaw": 259.0,
+     "pitch": -30
+    },
+    {
+     "to": "family",
+     "yaw": 109.7,
+     "pitch": -12
+    }
+   ]
+  },
+  {
+   "slug": "family",
+   "name": "Family room",
+   "floor": "Upper floor",
+   "yaw": 270,
+   "pitch": 0,
+   "staged": true,
+   "spots": [
+    {
+     "to": "deck",
+     "yaw": 254.9,
+     "pitch": -30
+    },
+    {
+     "to": "living",
+     "yaw": 182.5,
+     "pitch": -25
+    },
+    {
+     "to": "bedroom",
+     "yaw": 332.0,
+     "pitch": -8
+    }
+   ]
+  },
+  {
+   "slug": "living",
+   "name": "Living and dining",
+   "floor": "Upper floor",
+   "yaw": 270,
+   "pitch": 0,
+   "staged": true,
+   "spots": [
+    {
+     "to": "kitchen",
+     "yaw": 126.0,
+     "pitch": -16
+    },
+    {
+     "to": "family",
+     "yaw": 60.4,
+     "pitch": -18
+    }
+   ]
+  },
+  {
+   "slug": "kitchen",
+   "name": "Kitchen",
+   "floor": "Upper floor",
+   "yaw": 180,
+   "pitch": 0,
+   "staged": true,
+   "spots": [
+    {
+     "to": "living",
+     "yaw": 307.6,
+     "pitch": -28
+    },
+    {
+     "to": "family",
+     "yaw": 346.8,
+     "pitch": -28
+    }
+   ]
+  },
+  {
+   "slug": "bedroom",
+   "name": "Bedroom",
+   "floor": "Upper floor",
+   "yaw": 0,
+   "pitch": 0,
+   "staged": true,
+   "spots": [
+    {
+     "to": "family",
+     "yaw": 234.0,
+     "pitch": -30
+    }
+   ]
+  }
+ ],
+ "poster_alt": "Living and dining room of the hillside home, a frame from the virtual tour"
+}

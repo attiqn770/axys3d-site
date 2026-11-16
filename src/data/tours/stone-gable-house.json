@@ -1,0 +1,120 @@
+{
+ "slug": "stone-gable-house",
+ "project": "Stone gable house",
+ "summary": "A single storey family home with a stone clad gable and a two car garage, walked from the street to the back garden.",
+ "rooms_count": 5,
+ "title": "Stone gable house",
+ "note": "Five 360 degree views around the house, rendered from the studio's Blender scene. The model is an exterior, so the tour stays outside. Planting, street and neighbours are set dressing.",
+ "size": [
+  4096,
+  2048
+ ],
+ "small": [
+  2048,
+  1024
+ ],
+ "rooms": [
+  {
+   "slug": "street",
+   "name": "Street",
+   "floor": "Outside",
+   "yaw": 180,
+   "pitch": 0,
+   "staged": false,
+   "spots": [
+    {
+     "to": "lawn",
+     "yaw": 135.0,
+     "pitch": -22.0
+    },
+    {
+     "to": "driveway",
+     "yaw": 218.7,
+     "pitch": -20.3
+    }
+   ]
+  },
+  {
+   "slug": "lawn",
+   "name": "Front lawn",
+   "floor": "Outside",
+   "yaw": 190,
+   "pitch": 0,
+   "staged": false,
+   "spots": [
+    {
+     "to": "street",
+     "yaw": 315.0,
+     "pitch": -1.5
+    },
+    {
+     "to": "entry",
+     "yaw": 173.9,
+     "pitch": -20.0
+    },
+    {
+     "to": "driveway",
+     "yaw": 263.6,
+     "pitch": -8.7
+    }
+   ]
+  },
+  {
+   "slug": "driveway",
+   "name": "Driveway",
+   "floor": "Outside",
+   "yaw": 160,
+   "pitch": 0,
+   "staged": false,
+   "spots": [
+    {
+     "to": "street",
+     "yaw": 38.7,
+     "pitch": -1.6
+    },
+    {
+     "to": "lawn",
+     "yaw": 83.6,
+     "pitch": -9.1
+    },
+    {
+     "to": "garden",
+     "yaw": 161.1,
+     "pitch": -2.7
+    }
+   ]
+  },
+  {
+   "slug": "entry",
+   "name": "Front door",
+   "floor": "Outside",
+   "yaw": 185,
+   "pitch": 0,
+   "staged": false,
+   "spots": [
+    {
+     "to": "lawn",
+     "yaw": 353.9,
+     "pitch": -22.0
+    }
+   ]
+  },
+  {
+   "slug": "garden",
+   "name": "Back garden",
+   "floor": "Outside",
+   "yaw": 270,
+   "pitch": 0,
+   "staged": true,
+   "spots": [
+    {
+     "to": "driveway",
+     "yaw": 341.1,
+     "pitch": -3.9
+    }
+   ]
+  }
+ ],
+ "poster_alt": "Front of a white single storey house with a stone gable, two garage doors and a lawn, seen from the driveway",
+ "order": 30
+}
