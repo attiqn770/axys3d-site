@@ -1,16 +1,31 @@
 ---
 // Profile cards for the people behind Axys3D, on the Hire us page. Data: src/data/team.ts.
-import { team, checked } from "../data/team";
+// The badge icons are drawn here in the platform's own shapes and colours, so the cards read like the profiles.
+import { team, checked, type Member } from "../data/team";
 import { platforms } from "../data/hire";
 
 const people = team.filter((m) => m.upwork || m.fiverr);
-const stats = (m: (typeof team)[number]) =>
+const num = (n: number) => n.toLocaleString("en-US");
+const stats = (m: Member) =>
   [
-    m.jobSuccess ? { v: `${m.jobSuccess}%`, k: "Job Success" } : null,
+    m.earned ? { v: `$${num(m.earned)}`, k: "Earned on Upwork" } : null,
+    m.jobs ? { v: num(m.jobs), k: "Jobs done" } : null,
+    m.hours ? { v: num(m.hours), k: "Hours worked" } : null,
     m.rating ? { v: m.rating.toFixed(1), k: m.reviews ? `Rating, ${m.reviews} reviews` : "Rating" } : null,
-    m.jobs ? { v: String(m.jobs), k: "Jobs done" } : null,
-    m.hours ? { v: m.hours, k: "Hours billed" } : null,
   ].filter(Boolean) as { v: string; k: string }[];
+
+// a scalloped rosette for the verified tick (12 points)
+const rosette = Array.from({ length: 24 }, (_, i) => {
+  const a = (i / 24) * Math.PI * 2 - Math.PI / 2, r = i % 2 ? 9.6 : 11.4;
+  return `${(12 + r * Math.cos(a)).toFixed(2)},${(12 + r * Math.sin(a)).toFixed(2)}`;
+}).join(" ");
+// a five point star, drawn as an outline inside the badge hexagon
+const star = Array.from({ length: 10 }, (_, i) => {
+  const a = (i / 10) * Math.PI * 2 - Math.PI / 2, r = i % 2 ? 2.6 : 5.6;
+  return `${(12 + r * Math.cos(a)).toFixed(2)},${(12.4 + r * Math.sin(a)).toFixed(2)}`;
+}).join(" ");
+const hex = "12,1.6 21,6.8 21,17.2 12,22.4 3,17.2 3,6.8";
+const badgeColor: Record<string, string> = { "Top Rated Plus": "#e0559b", "Top Rated": "#1f57c3", "Rising Talent": "#14a800" };
 ---
 
 {people.length > 0 && (
@@ -25,12 +40,42 @@ const stats = (m: (typeof team)[number]) =>
           <li class="tm-card" data-ax style={`--ax-d:${i * 0.07}s`}>
             <div class="tm-who">
               <img src={`/media/team/${m.slug}.webp`} width="72" height="72" alt={`${m.name}, Axys3D`} loading="lazy" decoding="async" />
-              <div>
-                <h3>{m.name}</h3>
+              <div class="tm-id">
+                <h3>
+                  {m.name}
+                  {m.verified && (
+                    <svg class="tm-tick" viewBox="0 0 24 24" role="img" aria-label="Identity verified on Upwork">
+                      <polygon points={rosette} fill="#1f57c3" stroke="#1f57c3" stroke-width="1.6" stroke-linejoin="round" />
+                      <path d="M7.6 12.3l3 3 5.8-6.2" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  )}
+                </h3>
                 <p class="tm-role">{m.role}</p>
-                {m.badge && <span class="tm-badge">{m.badge}</span>}
               </div>
             </div>
+            {(m.jobSuccess || m.badge) && (
+              <ul class="tm-badges" aria-label="Upwork badges">
+                {m.jobSuccess && (
+                  <li>
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <circle cx="12" cy="12" r="10.4" fill="none" stroke="#1f57c3" stroke-width="1.7" />
+                      <path d="M7 9.2l2.6 2.2L12 7.6l2.4 3.8L17 9.2l-1.1 5.4H8.1z" fill="#1f57c3" />
+                      <rect x="8.1" y="15.6" width="7.8" height="1.6" rx="0.8" fill="#1f57c3" />
+                    </svg>
+                    {m.jobSuccess}% Job Success
+                  </li>
+                )}
+                {m.badge && (
+                  <li>
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <polygon points={hex} fill={badgeColor[m.badge]} stroke={badgeColor[m.badge]} stroke-width="2.4" stroke-linejoin="round" />
+                      <polygon points={star} fill="none" stroke="#fff" stroke-width="1.5" stroke-linejoin="round" />
+                    </svg>
+                    {m.badge}
+                  </li>
+                )}
+              </ul>
+            )}
             {stats(m).length > 0 && (
               <dl class="tm-stats">
                 {stats(m).map((s) => <div><dt>{s.k}</dt><dd>{s.v}</dd></div>)}
@@ -52,20 +97,24 @@ const stats = (m: (typeof team)[number]) =>
           </li>
         ))}
       </ul>
-      <p class="tm-note" data-ax>Figures from each public Upwork profile, {checked}. Not sure who to pick? <a href="/contact/">Start a project</a> and we match your brief to the right person.</p>
+      <p class="tm-note" data-ax>Figures from each Upwork profile, {checked}. Not sure who to pick? <a href="/contact/">Start a project</a> and we match your brief to the right person.</p>
     </div>
   </section>
 )}
 
 <style>
-  .tm-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: clamp(10px, 1.2vw, 16px); margin: 0; padding: 0; list-style: none; }
-  .tm-card { display: flex; flex-direction: column; gap: 20px; min-width: 0; padding: clamp(20px, 2.2vw, 30px); border-radius: var(--ax-r-lg); background: var(--ax-surface); }
-  .tm-who { display: flex; align-items: center; gap: 16px; }
+  .tm-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: clamp(10px, 1.2vw, 16px); margin: 0; padding: 0; list-style: none; }
+  @media (min-width: 1200px) { .tm-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .tm-card { display: flex; flex-direction: column; gap: 18px; min-width: 0; padding: clamp(20px, 2vw, 28px); border-radius: var(--ax-r-lg); background: var(--ax-surface); }
+  .tm-who { display: flex; align-items: center; gap: 14px; }
   .tm-who img { flex: none; width: 72px; height: 72px; border-radius: 50%; object-fit: cover; background: var(--ax-line); }
-  .tm-who h3 { margin: 0; font-size: 22px; font-weight: 800; line-height: 1.1; }
-  .tm-role { margin: 4px 0 0; font-size: 15px; line-height: 1.35; color: var(--ax-text-2); }
-  .tm-badge { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; padding: 4px 10px; border-radius: 999px; background: var(--ax-text); color: var(--ax-bg, #fff); font: 600 12.5px/1.2 var(--ax-font); }
-  .tm-badge::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--ax-gold); }
+  .tm-id { min-width: 0; }
+  .tm-who h3 { display: flex; align-items: center; gap: 6px; margin: 0; font-family: var(--ax-font); font-size: 21px; font-weight: 700; line-height: 1.15; letter-spacing: 0; text-transform: none; }
+  .tm-tick { flex: none; width: 20px; height: 20px; }
+  .tm-role { margin: 4px 0 0; font-size: 14.5px; line-height: 1.35; color: var(--ax-text-2); }
+  .tm-badges { display: flex; flex-wrap: wrap; gap: 8px 16px; margin: 0; padding: 0; list-style: none; }
+  .tm-badges li { display: inline-flex; align-items: center; gap: 7px; font: 600 15px/1.2 var(--ax-font); color: var(--ax-text); }
+  .tm-badges svg { flex: none; width: 26px; height: 26px; }
   .tm-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 16px; margin: 0; padding-top: 18px; border-top: 1px solid var(--ax-line); }
   .tm-stats div { min-width: 0; }
   .tm-stats dt { font-size: 13px; color: var(--ax-text-3); }
@@ -73,7 +122,7 @@ const stats = (m: (typeof team)[number]) =>
   .tm-rate { margin: 0; font-size: 15px; color: var(--ax-text-2); }
   .tm-rate b { font-size: 18px; color: var(--ax-text); }
   .tm-go { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
-  .tm-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; flex: 1 1 120px; min-height: 48px; padding: 0 16px; border: 1px solid var(--ax-line-strong); border-radius: 999px; font: 600 15px/1 var(--ax-font); color: var(--ax-text); text-decoration: none; transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
+  .tm-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; flex: 1 1 110px; min-height: 48px; padding: 0 16px; border: 1px solid var(--ax-line-strong); border-radius: 999px; font: 600 15px/1 var(--ax-font); color: var(--ax-text); text-decoration: none; transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
   .tm-btn svg { width: 20px; height: 20px; fill: currentColor; }
   .tm-btn svg.tm-fv { width: 56px; height: 21px; }
   .tm-btn:hover { background: var(--ax-text); color: var(--ax-bg, #fff); border-color: var(--ax-text); }
