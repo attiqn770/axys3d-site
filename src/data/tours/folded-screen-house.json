@@ -1,0 +1,130 @@
+{
+ "slug": "folded-screen-house",
+ "project": "Folded screen house",
+ "summary": "A two storey white clad house set into a slope, with a folded screen on its south side, a pool deck and a lawn all round.",
+ "rooms_count": 6,
+ "title": "Folded screen house",
+ "note": "Six 360 degree views rendered from the studio's Revit model. The sofas, beds, dining and kitchen are the model's own; plants, lamps, rugs and accessories are virtual staging.",
+ "size": [
+  4096,
+  2048
+ ],
+ "small": [
+  2048,
+  1024
+ ],
+ "rooms": [
+  {
+   "slug": "living",
+   "name": "Living and dining",
+   "floor": "Ground floor",
+   "yaw": 90,
+   "pitch": 0,
+   "staged": true,
+   "spots": [
+    {
+     "to": "kitchen",
+     "yaw": 94.7,
+     "pitch": -15.9
+    },
+    {
+     "to": "terrace",
+     "yaw": 262.4,
+     "pitch": -22.0
+    }
+   ]
+  },
+  {
+   "slug": "kitchen",
+   "name": "Kitchen",
+   "floor": "Ground floor",
+   "yaw": 90,
+   "pitch": 0,
+   "staged": true,
+   "spots": [
+    {
+     "to": "living",
+     "yaw": 274.7,
+     "pitch": -15.9
+    },
+    {
+     "to": "lounge",
+     "yaw": 147.3,
+     "pitch": 12.0
+    }
+   ]
+  },
+  {
+   "slug": "lounge",
+   "name": "Upstairs lounge",
+   "floor": "First floor",
+   "yaw": 300,
+   "pitch": 0,
+   "staged": true,
+   "spots": [
+    {
+     "to": "bedroom",
+     "yaw": 272.3,
+     "pitch": -15.6
+    },
+    {
+     "to": "kitchen",
+     "yaw": 327.3,
+     "pitch": -22.0
+    }
+   ]
+  },
+  {
+   "slug": "bedroom",
+   "name": "Bedroom",
+   "floor": "First floor",
+   "yaw": 0,
+   "pitch": 0,
+   "staged": true,
+   "spots": [
+    {
+     "to": "lounge",
+     "yaw": 92.3,
+     "pitch": -15.6
+    }
+   ]
+  },
+  {
+   "slug": "terrace",
+   "name": "Covered terrace",
+   "floor": "Ground floor",
+   "yaw": 270,
+   "pitch": 0,
+   "staged": false,
+   "spots": [
+    {
+     "to": "living",
+     "yaw": 82.4,
+     "pitch": -22.0
+    },
+    {
+     "to": "pool",
+     "yaw": 306.2,
+     "pitch": -20.7
+    }
+   ]
+  },
+  {
+   "slug": "pool",
+   "name": "Pool deck",
+   "floor": "Outside",
+   "yaw": 120,
+   "pitch": 0,
+   "staged": true,
+   "spots": [
+    {
+     "to": "terrace",
+     "yaw": 126.2,
+     "pitch": -9.8
+    }
+   ]
+  }
+ ],
+ "poster_alt": "Open plan living and dining room with a timber ceiling, a white sofa and a glazed end wall looking out to the deck",
+ "order": 31
+}
