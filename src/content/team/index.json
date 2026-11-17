@@ -1,0 +1,70 @@
+{
+  "checked": "November 2026",
+  "members": [
+    {
+      "name": "Attiq R.",
+      "photo": "/media/team/attiq.webp",
+      "role": "3D visualization and CAD",
+      "upwork": "https://www.upwork.com/freelancers/attiqrehman15",
+      "fiverr": "https://www.fiverr.com/itzghostrider",
+      "verified": true,
+      "badge": "Top Rated Plus",
+      "jobSuccess": 100,
+      "rating": 5,
+      "reviews": 18,
+      "jobs": 32,
+      "hours": 1700,
+      "earned": 35000,
+      "rate": "$25",
+      "visible": true
+    },
+    {
+      "name": "Muneeb U.",
+      "photo": "/media/team/muneeb.webp",
+      "role": "Revit, permit sets and scan to BIM",
+      "upwork": "https://www.upwork.com/freelancers/~01764ff548009cb954",
+      "fiverr": "",
+      "verified": true,
+      "badge": "Top Rated Plus",
+      "jobSuccess": 100,
+      "rating": 5,
+      "reviews": 4,
+      "jobs": 17,
+      "hours": 1100,
+      "earned": 21240,
+      "rate": "$25",
+      "visible": true
+    },
+    {
+      "name": "Kaleem U.",
+      "photo": "/media/team/kaleem.webp",
+      "role": "Revit BIM, permit sets and 3D rendering",
+      "upwork": "https://www.upwork.com/freelancers/~01f7cd3f1ababd0221",
+      "fiverr": "",
+      "verified": true,
+      "badge": "Top Rated",
+      "jobSuccess": 100,
+      "rating": 5,
+      "reviews": 3,
+      "jobs": 5,
+      "hours": 51,
+      "earned": 1292,
+      "rate": "$20",
+      "visible": true
+    },
+    {
+      "name": "Matti U.",
+      "photo": "/media/team/matti.webp",
+      "role": "Interior design and architectural visualization",
+      "upwork": "https://www.upwork.com/freelancers/~01d3ccb98cc31b5a2f",
+      "fiverr": "https://www.fiverr.com/matti7215",
+      "verified": true,
+      "badge": "Top Rated",
+      "jobs": 20,
+      "hours": 85,
+      "earned": 3788,
+      "rate": "$20",
+      "visible": true
+    }
+  ]
+}
