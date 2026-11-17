@@ -32,7 +32,6 @@ export const work = [
   { id: "office", title: "Office interior", kind: "Commercial visualization" },
   { id: "bathroom", title: "Bathroom", kind: "Interior visualization" },
   { id: "environment", title: "Exterior environment", kind: "Environment and real time" },
-  { id: "product", title: "Product visualization", kind: "Product animation" },
   { id: "exterior", title: "Two storey residence", kind: "Exterior film" },
 ];
 
