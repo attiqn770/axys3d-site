@@ -138,6 +138,8 @@ img { background-color: transparent; }
 /* ---------- reveal: one quiet fade and rise, once ---------- */
 .ax-js [data-ax] { opacity: 0; transform: translateY(18px); transition: opacity 0.8s var(--ax-ease), transform 0.8s var(--ax-ease); transition-delay: var(--ax-d, 0s); }
 .ax-js [data-ax].is-in { opacity: 1; transform: none; }
+/* a section opened by a #link shows at once, so the jump does not land short while it slides in */
+.ax-js [data-ax]:target { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { .ax-js [data-ax] { opacity: 1; transform: none; transition: none; } }
 
 /* ---------- shared page pieces ---------- */

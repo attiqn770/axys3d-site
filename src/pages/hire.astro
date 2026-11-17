@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 import "../styles/global.css";
 import { platforms, rates } from "../data/hire";
+import TeamCards from "../components/TeamCards.astro";
 
 const ext = (p: { url: string }) => (p.url ? { target: "_blank", rel: "noopener" } : {});
 const plain = (s: string) => s.replace(/-/g, " ");
@@ -120,6 +121,9 @@ const ld = [{ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: 
           </div>
         </div>
       </section>
+
+      <!-- who: the real people and their platform records, right after the ways to buy -->
+      <TeamCards />
 
       <!-- how: five steps, the one you have reached turns black -->
       <section class="ax-section" id="how" aria-labelledby="hrHow">

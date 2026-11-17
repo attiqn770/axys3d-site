@@ -1,0 +1,84 @@
+---
+// Profile cards for the people behind Axys3D, on the Hire us page. Data: src/data/team.ts.
+import { team, checked } from "../data/team";
+import { platforms } from "../data/hire";
+
+const people = team.filter((m) => m.upwork || m.fiverr);
+const stats = (m: (typeof team)[number]) =>
+  [
+    m.jobSuccess ? { v: `${m.jobSuccess}%`, k: "Job Success" } : null,
+    m.rating ? { v: m.rating.toFixed(1), k: m.reviews ? `Rating, ${m.reviews} reviews` : "Rating" } : null,
+    m.jobs ? { v: String(m.jobs), k: "Jobs done" } : null,
+    m.hours ? { v: m.hours, k: "Hours billed" } : null,
+  ].filter(Boolean) as { v: string; k: string }[];
+---
+
+{people.length > 0 && (
+  <section class="ax-section tm" id="team" aria-labelledby="tmHead">
+    <div class="ax-wrap">
+      <header class="ax-head">
+        <h2 id="tmHead" data-ax>Hire one of us by name.</h2>
+        <p class="ax-lead" data-ax>The same people who make the work on this site. Check our records on the platform, then hire the person who fits your job.</p>
+      </header>
+      <ul class="tm-grid">
+        {people.map((m, i) => (
+          <li class="tm-card" data-ax style={`--ax-d:${i * 0.07}s`}>
+            <div class="tm-who">
+              <img src={`/media/team/${m.slug}.webp`} width="72" height="72" alt={`${m.name}, Axys3D`} loading="lazy" decoding="async" />
+              <div>
+                <h3>{m.name}</h3>
+                <p class="tm-role">{m.role}</p>
+                {m.badge && <span class="tm-badge">{m.badge}</span>}
+              </div>
+            </div>
+            {stats(m).length > 0 && (
+              <dl class="tm-stats">
+                {stats(m).map((s) => <div><dt>{s.k}</dt><dd>{s.v}</dd></div>)}
+              </dl>
+            )}
+            {m.rate && <p class="tm-rate"><b>{m.rate}</b> per hour on Upwork</p>}
+            <div class="tm-go">
+              {m.upwork && (
+                <a href={m.upwork} target="_blank" rel="noopener" class="tm-btn" aria-label={`${m.name} on Upwork (opens in a new tab)`}>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d={platforms.upwork.logo} /></svg>Upwork
+                </a>
+              )}
+              {m.fiverr && (
+                <a href={m.fiverr} target="_blank" rel="noopener" class="tm-btn" aria-label={`${m.name} on Fiverr (opens in a new tab)`}>
+                  <svg class="tm-fv" viewBox="0 7.5 24 9" aria-hidden="true"><path d={platforms.fiverr.logo} /></svg>
+                </a>
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
+      <p class="tm-note" data-ax>Figures from each public Upwork profile, {checked}. Not sure who to pick? <a href="/contact/">Start a project</a> and we match your brief to the right person.</p>
+    </div>
+  </section>
+)}
+
+<style>
+  .tm-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: clamp(10px, 1.2vw, 16px); margin: 0; padding: 0; list-style: none; }
+  .tm-card { display: flex; flex-direction: column; gap: 20px; min-width: 0; padding: clamp(20px, 2.2vw, 30px); border-radius: var(--ax-r-lg); background: var(--ax-surface); }
+  .tm-who { display: flex; align-items: center; gap: 16px; }
+  .tm-who img { flex: none; width: 72px; height: 72px; border-radius: 50%; object-fit: cover; background: var(--ax-line); }
+  .tm-who h3 { margin: 0; font-size: 22px; font-weight: 800; line-height: 1.1; }
+  .tm-role { margin: 4px 0 0; font-size: 15px; line-height: 1.35; color: var(--ax-text-2); }
+  .tm-badge { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; padding: 4px 10px; border-radius: 999px; background: var(--ax-text); color: var(--ax-bg, #fff); font: 600 12.5px/1.2 var(--ax-font); }
+  .tm-badge::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--ax-gold); }
+  .tm-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 16px; margin: 0; padding-top: 18px; border-top: 1px solid var(--ax-line); }
+  .tm-stats div { min-width: 0; }
+  .tm-stats dt { font-size: 13px; color: var(--ax-text-3); }
+  .tm-stats dd { margin: 2px 0 0; font-family: var(--ax-display); font-size: 30px; font-weight: 800; line-height: 1; }
+  .tm-rate { margin: 0; font-size: 15px; color: var(--ax-text-2); }
+  .tm-rate b { font-size: 18px; color: var(--ax-text); }
+  .tm-go { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
+  .tm-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; flex: 1 1 120px; min-height: 48px; padding: 0 16px; border: 1px solid var(--ax-line-strong); border-radius: 999px; font: 600 15px/1 var(--ax-font); color: var(--ax-text); text-decoration: none; transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
+  .tm-btn svg { width: 20px; height: 20px; fill: currentColor; }
+  .tm-btn svg.tm-fv { width: 56px; height: 21px; }
+  .tm-btn:hover { background: var(--ax-text); color: var(--ax-bg, #fff); border-color: var(--ax-text); }
+  .tm-btn:focus-visible { outline: 2px solid var(--ax-gold); outline-offset: 2px; }
+  .tm-note { margin: clamp(18px, 2vw, 26px) 0 0; font-size: 15px; color: var(--ax-text-3); }
+  .tm-note a { color: var(--ax-text); font-weight: 600; }
+  @media (prefers-reduced-motion: reduce) { .tm-btn { transition: none; } }
+</style>

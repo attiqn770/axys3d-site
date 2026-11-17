@@ -5,7 +5,6 @@
 
 /* the header is attached to the top edge: anchors stop just below it */
 html { scroll-padding-top: 76px; font-synthesis: none; -webkit-text-size-adjust: 100%; }
-section[id] { scroll-margin-top: 76px; }
 
 *, *::before, *::after { box-sizing: border-box; }
 
