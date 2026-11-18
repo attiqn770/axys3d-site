@@ -3,7 +3,7 @@
 #   2. builds the site (npx astro build),
 #   3. uploads dist/ to Hostinger by FTP.
 # One-time setup (EDITING.md): repository secrets FTP_SERVER, FTP_USERNAME, FTP_PASSWORD.
-# Optional repository variable FTP_PROTOCOL: "ftps" (default, encrypted) or "ftp" if the host refuses FTPS.
+# Optional repository variable FTP_PROTOCOL: "ftp" (default; Hostinger drops the FTPS data channel) or "ftps" for encrypted transfer on hosts that support it.
 name: Publish the website
 
 on:
@@ -87,7 +87,7 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ${{ vars.FTP_PROTOCOL || 'ftps' }}
+          protocol: ${{ vars.FTP_PROTOCOL || 'ftp' }}
           local-dir: ./dist/
           server-dir: public_html/
           # Never touched on the server (not uploaded, never deleted): the mail settings and mail logs live
