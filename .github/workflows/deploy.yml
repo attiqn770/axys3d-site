@@ -80,23 +80,31 @@ jobs:
             echo "ready=true" >> "$GITHUB_OUTPUT"
           fi
 
+      # lftp instead of FTP-Deploy-Action: Hostinger resets that tool's data connection on the first folder.
+      # Only new or changed files are sent. Nothing on the server is deleted, so the mail settings
+      # (public_html/mail/mail-config.php, git ignored) and the host's own folders are never touched.
       - name: Upload to Hostinger
         if: steps.ftp.outputs.ready == 'true'
-        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ${{ vars.FTP_PROTOCOL || 'ftp' }}
-          local-dir: ./dist/
-          server-dir: public_html/
-          # Never touched on the server (not uploaded, never deleted): the mail settings and mail logs live
-          # only on the server (public/mail/mail-config.php is git ignored), plus the host's own folders.
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            mail/mail-config.php
-            mail/logs/**
-            .well-known/**
-            cgi-bin/**
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          LFTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_PROTOCOL: ${{ vars.FTP_PROTOCOL || 'ftp' }}
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq lftp >/dev/null
+          SSL=no; [ "$FTP_PROTOCOL" = "ftps" ] && SSL=yes
+          HOST="${FTP_SERVER#ftp://}"
+          lftp --env-password -u "$FTP_USERNAME" "$HOST" <<LFTP
+          set ftp:ssl-allow $SSL
+          set ssl:verify-certificate no
+          set ftp:passive-mode on
+          set ftp:prefer-epsv no
+          set net:timeout 30
+          set net:max-retries 5
+          set net:reconnect-interval-base 5
+          mirror --reverse --only-newer --no-perms --parallel=3 --verbose=1 \
+            --exclude-glob .git* --exclude-glob node_modules/ \
+            --exclude-glob mail/mail-config.php --exclude-glob mail/logs/ \
+            ./dist/ public_html/
+          bye
+          LFTP
