@@ -106,5 +106,10 @@ jobs:
             --exclude-glob .git* --exclude-glob node_modules/ \
             --exclude-glob mail/mail-config.php --exclude-glob mail/logs/ \
             ./dist/ public_html/
+          echo "== FTP start folder and its contents (to confirm where the site lives) =="
+          pwd
+          cls -1a
+          echo "== domains =="
+          cls -1a domains
           bye
           LFTP
