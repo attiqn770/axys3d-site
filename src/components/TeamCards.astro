@@ -1,14 +1,14 @@
 ---
 // Profile cards for the people behind Axys3D, on the Hire us page. Data: src/data/team.ts.
 // The badge icons are drawn here in the platform's own shapes and colours, so the cards read like the profiles.
-import { team, checked, photoSrc, type Member } from "../data/team";
+import { team, checked, showEarnings, photoSrc, type Member } from "../data/team";
 import { platforms } from "../data/hire";
 
 const people = team.filter((m) => m.visible !== false && (m.upwork || m.fiverr));
 const num = (n: number) => n.toLocaleString("en-US");
 const stats = (m: Member) =>
   [
-    m.earned ? { v: `$${num(m.earned)}`, k: "Earned on Upwork" } : null,
+    showEarnings && m.earned ? { v: `$${num(m.earned)}`, k: "Earned on Upwork" } : null,
     m.jobs ? { v: num(m.jobs), k: "Jobs done" } : null,
     m.hours ? { v: num(m.hours), k: "Hours worked" } : null,
     m.rating ? { v: m.rating.toFixed(1), k: m.reviews ? `Rating, ${m.reviews} reviews` : "Rating" } : null,

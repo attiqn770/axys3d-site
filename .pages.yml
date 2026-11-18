@@ -812,6 +812,11 @@ content:
         label: When the figures were last copied
         type: string
         description: "Shown under the cards, for example: November 2026."
+      - name: showEarnings
+        label: Show earnings on the cards
+        type: boolean
+        default: false
+        description: "Off hides every person's Upwork earnings. The figures stay saved below, ready to show again."
       - name: members
         label: People
         type: object

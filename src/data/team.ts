@@ -25,6 +25,8 @@ export type Member = {
 };
 
 export const checked: string = data.checked ?? "";
+// the earnings figures stay in the file but show only when this is switched on in the editor
+export const showEarnings: boolean = (data as { showEarnings?: boolean }).showEarnings === true;
 export const team: Member[] = (data.members ?? []) as Member[];
 
 // a picture uploaded in the editor gets a small copy next to it (name-sm.webp); use that for the round photo

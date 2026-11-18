@@ -1,5 +1,6 @@
 {
   "checked": "November 2026",
+  "showEarnings": false,
   "members": [
     {
       "name": "Attiq R.",
@@ -60,6 +61,7 @@
       "fiverr": "https://www.fiverr.com/matti7215",
       "verified": true,
       "badge": "Top Rated",
+      "jobSuccess": 90,
       "jobs": 20,
       "hours": 85,
       "earned": 3788,
