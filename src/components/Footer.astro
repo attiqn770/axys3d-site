@@ -1,9 +1,10 @@
 ---
 import Logo from "./Logo.astro";
 import { email } from "../data/settings";
-import { social } from "../data/social";
+import { social, socialIcon } from "../data/social";
 import { services } from "../data/services";
 const socials = social.filter((s) => s.url);
+const key = (n: string) => n.toLowerCase().replace(/[^a-z]/g, "");
 ---
 
 <footer class="ax-foot ax-dark">
@@ -13,6 +14,27 @@ const socials = social.filter((s) => s.url);
         <a href="/" class="ax-foot-logo" aria-label="Axys3D home"><Logo /></a>
         <p>BIM, Revit and visualization production for architects, engineers, developers and agencies.</p>
         <a href={`mailto:${email}`} class="ax-foot-mail">{email}</a>
+        {socials.length > 0 && (
+          <ul class="ax-foot-social" aria-label="Axys3D on social media">
+            {socials.map((s) => (
+              <li>
+                <a href={s.url} target="_blank" rel="noopener noreferrer" aria-label={`Axys3D on ${s.name} (opens in a new tab)`} title={s.name}>
+                  {key(s.name) === "instagram" ? (
+                    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="2.6" y="2.6" width="18.8" height="18.8" rx="5.4" />
+                      <circle cx="12" cy="12" r="4.4" />
+                      <circle cx="17.6" cy="6.4" r="1.25" fill="currentColor" stroke="none" />
+                    </svg>
+                  ) : socialIcon[key(s.name)] ? (
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d={socialIcon[key(s.name)]} fill="currentColor" /></svg>
+                  ) : (
+                    <span class="ax-foot-social-txt" aria-hidden="true">{s.name.charAt(0)}</span>
+                  )}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       <nav class="ax-foot-col" aria-label="Services">
@@ -30,13 +52,6 @@ const socials = social.filter((s) => s.url);
         <a href="/hire/">Hire us</a>
         <a href="/contact/">Contact</a>
       </nav>
-
-      {socials.length > 0 && (
-        <nav class="ax-foot-col" aria-label="Social">
-          <span class="ax-foot-h">Follow</span>
-          {socials.map((s) => <a href={s.url} target="_blank" rel="noopener noreferrer">{s.name}</a>)}
-        </nav>
-      )}
     </div>
 
     <div class="ax-foot-bottom">
@@ -47,7 +62,14 @@ const socials = social.filter((s) => s.url);
 
 <style is:global>
   .ax-foot { padding: clamp(56px, 7vw, 96px) 0 32px; font-family: var(--ax-font); color: var(--ax-text-2); }
-  .ax-foot-top { display: grid; grid-template-columns: 1.6fr 1.3fr 1fr auto; gap: 48px; padding-bottom: 48px; }
+  .ax-foot-top { display: grid; grid-template-columns: 1.6fr 1.3fr 1fr; gap: 48px; padding-bottom: 48px; }
+  .ax-foot-social { display: flex; flex-wrap: wrap; gap: 10px; margin: 4px 0 0; padding: 0; list-style: none; }
+  .ax-foot-social a { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--ax-line-strong); border-radius: 50%; color: var(--ax-text); transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
+  .ax-foot-social svg { width: 19px; height: 19px; }
+  .ax-foot-social-txt { font: 700 16px/1 var(--ax-font); }
+  .ax-foot-social a:hover { background: var(--ax-accent); border-color: var(--ax-accent); color: #0b0c0f; }
+  .ax-foot-social a:focus-visible { outline: 2px solid var(--ax-accent); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) { .ax-foot-social a { transition: none; } }
   .ax-foot-brand { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; max-width: 360px; }
   .ax-foot-logo { display: inline-flex; align-items: center; min-height: 44px; color: var(--ax-text); }
   .ax-foot-logo .ax-logo { height: 30px; }

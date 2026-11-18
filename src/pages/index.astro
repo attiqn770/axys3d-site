@@ -1,6 +1,7 @@
 ---
 import SEO from "../components/SEO.astro";
 import { email } from "../data/settings";
+import { social } from "../data/social";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 import Explorer from "../components/Explorer.astro";
@@ -19,8 +20,9 @@ const heroFilmTall = home.heroFilmTall ?? home.heroFilm;
 const svcBySlug = Object.fromEntries(services.map((x) => [x.slug, x.title.replace(" & ", " and ")]));
 
 const siteUrl = Astro.site ?? new URL("https://axys3d.com");
+const sameAs = social.map((s) => s.url).filter(Boolean);
 const ld = [
-  { "@context": "https://schema.org", "@type": "Organization", name: "Axys3D", url: siteUrl.href, email },
+  { "@context": "https://schema.org", "@type": "Organization", name: "Axys3D", url: siteUrl.href, email, ...(sameAs.length ? { sameAs } : {}) },
   { "@context": "https://schema.org", "@type": "WebSite", name: "Axys3D", url: siteUrl.href },
   { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
 ];
